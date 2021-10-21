@@ -35,9 +35,10 @@ will produce this output:
 |col=255| 0| 57.1429002| 1.2| 10|
 ```
 
-`cond` is the WHERE condition
-`real` is the actual number of rows matching this condition
-`database-name` is the expected number of rows obtained from this database
+Columns:
+* `cond` is the WHERE condition
+* `real` is the actual number of rows matching this condition
+* `$database-name` is the expected number of rows obtained in $database-name.
 
 ## Adding your own tests.
 
