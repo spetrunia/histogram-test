@@ -7,7 +7,7 @@ do './database-config.pl';
 # Parse the parameters ...
 sub usage() {
   print "\n";
-  print " Usage: $0 [--jira-tables] --db=mysql,mariadb,postgresql  test_name \n";
+  print " Usage: $0 [--jira-tables] --db=mysql,mariadb,mariadb_old,postgresql  test_name\n";
   print "\n";
 }
 
@@ -37,7 +37,11 @@ do $test_name;
 
 @mariadb_analyze_cmds= (
   " set histogram_type=json_hb",
-#  " set histogram_type=double_prec_hb",
+  " analyze table t1 persistent for all"
+);
+
+@mariadb_old_analyze_cmds= (
+  " set histogram_type=double_prec_hb",
   " analyze table t1 persistent for all"
 );
 
@@ -65,6 +69,8 @@ sub prepare_dataset {
   my @analyze_cmds= ();
   if ($database_type eq "mariadb") {
     @analyze_cmds= @mariadb_analyze_cmds;
+  } elsif ($database_type eq "mariadb_old") {
+    @analyze_cmds= @mariadb_old_analyze_cmds;
   } elsif ($database_type eq "mysql") {
     @analyze_cmds= @mysql_analyze_cmds;
   } elsif ($database_type eq "postgresql") {
@@ -126,7 +132,8 @@ sub find_estimate_postgresql {
 
 sub find_estimate {
   my $cond= shift;
-  if ($database_type eq "mariadb" || 
+  if ($database_type eq "mariadb" ||
+      $database_type eq "mariadb_old" ||
       $database_type eq "mysql") {
     return find_estimate_mariadb($cond);
   } elsif ($database_type eq "postgresql") {
@@ -173,6 +180,11 @@ foreach (@databases) {
     $conn_str= $conn_str_mariadb;
     $conn_user=$conn_user_mariadb;
     $conn_password=$conn_password_mariadb;
+
+  } elsif ($database_type eq "mariadb_old") {
+    $conn_str= $conn_str_mariadb_old;
+    $conn_user=$conn_user_mariadb_old;
+    $conn_password=$conn_password_mariadb_old;
 
   } elsif ($database_type eq "mysql") {
     $conn_str= $conn_str_mysql;
