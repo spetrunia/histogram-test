@@ -17,7 +17,7 @@ Edit the `database-config.pl` and set the database connection parameters accordi
 
 For example:
 ```
-./histogram-test.pl  --db=mariadb,mysql,postgresql  ./03-common-and-uncommon.pl
+./histogram-test.pl --jira-tables --db=mariadb,mysql,postgresql  ./03-common-and-uncommon.pl
 ```
 
 will produce this output:

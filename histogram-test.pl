@@ -16,10 +16,10 @@ $print_jira_tables= 0;
 
 $db_arg= shift;
 if ($db_arg =~ /^--jira-tables$/) {
-   $print_jira_tables= 1;
+  $print_jira_tables= 1;
+  $db_arg= shift;
 }
   
-$db_arg= shift;
 if ($db_arg =~ /^--db=(.*)$/) {
   #print "dbs=$1\n";
   @databases= split(/,/, $1);
@@ -162,10 +162,6 @@ $SEP= "| ";
 ## Main
 ##
 
-#$database_type="mysql";
-#$database_type="mariadb";
-#$database_type="postgresql";
-
 foreach (@databases) {
 
   $database_type= $_;
@@ -175,13 +171,18 @@ foreach (@databases) {
 
   if ($database_type eq "mariadb") {
     $conn_str= $conn_str_mariadb;
-    $conn_user='root';
+    $conn_user=$conn_user_mariadb;
+    $conn_password=$conn_password_mariadb;
+
   } elsif ($database_type eq "mysql") {
     $conn_str= $conn_str_mysql;
-    $conn_user='root';
+    $conn_user=$conn_user_mysql;
+    $conn_password=$conn_password_mysql;
+
   } elsif ($database_type eq "postgresql") {
     $conn_str= $conn_str_postgresql;
-    $conn_password= 'foo';
+    $conn_user=$conn_user_postgresql;
+    $conn_password=$conn_password_postgresql;
   } else {
     die("Unknown database type $database_type");
   }
